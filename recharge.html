@@ -1,0 +1,615 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Recharge</title>
+
+<style>
+*{
+    box-sizing:border-box;
+    margin:0;
+    padding:0;
+}
+
+body{
+    font-family:Arial,sans-serif;
+    min-height:100vh;
+    background:linear-gradient(135deg,#eef6ff,#f5edff);
+    color:#172554;
+}
+
+.header{
+    padding:22px 20px;
+    background:linear-gradient(135deg,#167ff3,#6845e8);
+    color:white;
+    border-radius:0 0 28px 28px;
+}
+
+.header h1{
+    font-size:25px;
+    margin-bottom:6px;
+}
+
+.header p{
+    opacity:.85;
+}
+
+.container{
+    max-width:520px;
+    margin:auto;
+    padding:20px;
+}
+
+.tabs{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:10px;
+    margin-bottom:18px;
+}
+
+.tab{
+    border:0;
+    padding:13px 5px;
+    border-radius:14px;
+    background:white;
+    color:#55708f;
+    font-weight:bold;
+    cursor:pointer;
+    box-shadow:0 5px 18px rgba(40,70,130,.08);
+}
+
+.tab.active{
+    color:white;
+    background:linear-gradient(100deg,#168ff5,#7047e8);
+}
+
+.card{
+    background:rgba(255,255,255,.94);
+    padding:22px;
+    border-radius:24px;
+    box-shadow:0 15px 40px rgba(40,70,130,.12);
+}
+
+.card h2{
+    margin-bottom:20px;
+}
+
+.input-group{
+    margin-bottom:15px;
+}
+
+.input-group label{
+    display:block;
+    font-size:13px;
+    color:#64748b;
+    margin-bottom:7px;
+}
+
+.input-group input,
+.input-group select{
+    width:100%;
+    height:54px;
+    border:1.5px solid #d7e0ed;
+    border-radius:14px;
+    padding:0 15px;
+    font-size:16px;
+    outline:none;
+    background:white;
+}
+
+.input-group input:focus,
+.input-group select:focus{
+    border-color:#4389ff;
+    box-shadow:0 0 0 4px rgba(67,137,255,.10);
+}
+
+.amounts{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:9px;
+    margin:12px 0 18px;
+}
+
+.amount{
+    border:1px solid #d9e2ef;
+    background:#f8fbff;
+    padding:11px 4px;
+    border-radius:12px;
+    cursor:pointer;
+    font-weight:bold;
+    color:#3268c9;
+}
+
+.amount:hover{
+    background:#edf5ff;
+}
+
+.recharge-btn{
+    width:100%;
+    height:55px;
+    border:0;
+    border-radius:15px;
+    background:linear-gradient(100deg,#168ff5,#7047e8);
+    color:white;
+    font-size:17px;
+    font-weight:bold;
+    cursor:pointer;
+}
+
+.recharge-btn:active{
+    transform:scale(.98);
+}
+
+.message{
+    display:none;
+    margin-top:16px;
+    padding:14px;
+    border-radius:13px;
+    text-align:center;
+    font-weight:bold;
+}
+
+.message.success{
+    display:block;
+    color:#087443;
+    background:#e8fff4;
+    border:1px solid #a9ebca;
+}
+
+.message.error{
+    display:block;
+    color:#b42318;
+    background:#fff0ef;
+    border:1px solid #ffc5c0;
+}
+
+.info{
+    margin-top:16px;
+    padding:14px;
+    border-radius:14px;
+    background:#f4f7ff;
+    color:#61708a;
+    font-size:13px;
+    line-height:1.5;
+}
+
+.history-btn{
+    display:block;
+    width:100%;
+    margin-top:14px;
+    padding:14px;
+    border-radius:14px;
+    text-align:center;
+    text-decoration:none;
+    background:white;
+    color:#3778ed;
+    font-weight:bold;
+}
+
+.hidden{
+    display:none;
+}
+</style>
+</head>
+
+<body>
+
+<div class="header">
+    <h1>Recharge</h1>
+    <p>Mobile, DTH & Postpaid recharge</p>
+</div>
+
+<div class="container">
+
+    <div class="tabs">
+        <button class="tab active" onclick="showType('prepaid',this)">
+            Mobile
+        </button>
+
+        <button class="tab" onclick="showType('dth',this)">
+            DTH
+        </button>
+
+        <button class="tab" onclick="showType('postpaid',this)">
+            Postpaid
+        </button>
+    </div>
+
+    <div class="card">
+
+        <!-- MOBILE -->
+        <div id="prepaid">
+
+            <h2>📱 Mobile Recharge</h2>
+
+            <div class="input-group">
+                <label>Mobile Number</label>
+                <input
+                    type="tel"
+                    id="mobile"
+                    maxlength="10"
+                    inputmode="numeric"
+                    placeholder="Enter 10-digit mobile number"
+                >
+            </div>
+
+            <div class="input-group">
+                <label>Operator</label>
+                <select id="operator">
+                    <option value="">Select Operator</option>
+                    <option>Jio</option>
+                    <option>Airtel</option>
+                    <option>Vi</option>
+                    <option>BSNL</option>
+                </select>
+            </div>
+
+            <div class="input-group">
+                <label>Amount</label>
+                <input
+                    type="number"
+                    id="mobileAmount"
+                    min="10"
+                    placeholder="Enter amount"
+                >
+            </div>
+
+            <div class="amounts">
+                <button class="amount" onclick="setAmount(199)">₹199</button>
+                <button class="amount" onclick="setAmount(299)">₹299</button>
+                <button class="amount" onclick="setAmount(399)">₹399</button>
+                <button class="amount" onclick="setAmount(499)">₹499</button>
+                <button class="amount" onclick="setAmount(599)">₹599</button>
+                <button class="amount" onclick="setAmount(799)">₹799</button>
+            </div>
+
+            <button class="recharge-btn" onclick="submitRecharge('Mobile Recharge')">
+                Proceed Recharge →
+            </button>
+        </div>
+
+        <!-- DTH -->
+        <div id="dth" class="hidden">
+
+            <h2>📺 DTH Recharge</h2>
+
+            <div class="input-group">
+                <label>DTH Operator</label>
+                <select id="dthOperator">
+                    <option value="">Select Operator</option>
+                    <option>Tata Play</option>
+                    <option>Airtel Digital TV</option>
+                    <option>Dish TV</option>
+                    <option>Videocon D2H</option>
+                    <option>Sun Direct</option>
+                </select>
+            </div>
+
+            <div class="input-group">
+                <label>Subscriber ID</label>
+                <input
+                    type="text"
+                    id="subscriber"
+                    placeholder="Enter subscriber ID"
+                >
+            </div>
+
+            <div class="input-group">
+                <label>Amount</label>
+                <input
+                    type="number"
+                    id="dthAmount"
+                    min="10"
+                    placeholder="Enter amount"
+                >
+            </div>
+
+            <div class="amounts">
+                <button class="amount" onclick="setDthAmount(199)">₹199</button>
+                <button class="amount" onclick="setDthAmount(299)">₹299</button>
+                <button class="amount" onclick="setDthAmount(399)">₹399</button>
+            </div>
+
+            <button class="recharge-btn" onclick="submitDth()">
+                Proceed Recharge →
+            </button>
+        </div>
+
+        <!-- POSTPAID -->
+        <div id="postpaid" class="hidden">
+
+            <h2>📱 Postpaid Bill</h2>
+
+            <div class="input-group">
+                <label>Mobile Number</label>
+                <input
+                    type="tel"
+                    id="postpaidMobile"
+                    maxlength="10"
+                    inputmode="numeric"
+                    placeholder="Enter 10-digit mobile number"
+                >
+            </div>
+
+            <div class="input-group">
+                <label>Operator</label>
+                <select id="postpaidOperator">
+                    <option value="">Select Operator</option>
+                    <option>Jio</option>
+                    <option>Airtel</option>
+                    <option>Vi</option>
+                    <option>BSNL</option>
+                </select>
+            </div>
+
+            <div class="input-group">
+                <label>Bill Amount</label>
+                <input
+                    type="number"
+                    id="postpaidAmount"
+                    min="1"
+                    placeholder="Enter bill amount"
+                >
+            </div>
+
+            <button class="recharge-btn" onclick="submitPostpaid()">
+                Pay Bill →
+            </button>
+        </div>
+
+        <div id="message" class="message"></div>
+
+        <div class="info">
+            ℹ️ Your request will be saved in this interface.
+            Actual recharge/payment requires a connected backend
+            and authorized recharge/payment API.
+        </div>
+
+    </div>
+
+    <a class="history-btn" href="history.html">
+        📋 View Recharge History
+    </a>
+
+</div>
+
+<script>
+
+function showType(type,button){
+
+    document.getElementById("prepaid").classList.add("hidden");
+    document.getElementById("dth").classList.add("hidden");
+    document.getElementById("postpaid").classList.add("hidden");
+
+    document.getElementById(type).classList.remove("hidden");
+
+    document.querySelectorAll(".tab").forEach(function(tab){
+        tab.classList.remove("active");
+    });
+
+    button.classList.add("active");
+
+    clearMessage();
+}
+
+
+function setAmount(amount){
+    document.getElementById("mobileAmount").value = amount;
+}
+
+
+function setDthAmount(amount){
+    document.getElementById("dthAmount").value = amount;
+}
+
+
+function showMessage(text,type){
+
+    const box = document.getElementById("message");
+
+    box.className = "message " + type;
+    box.textContent = text;
+}
+
+
+function clearMessage(){
+
+    const box = document.getElementById("message");
+
+    box.className = "message";
+    box.textContent = "";
+}
+
+
+function saveHistory(type,number,operator,amount){
+
+    const history =
+        JSON.parse(localStorage.getItem("rechargeHistory") || "[]");
+
+    history.unshift({
+
+        type:type,
+        number:number,
+        operator:operator,
+        amount:amount,
+        status:"Request Saved",
+        date:new Date().toLocaleString()
+
+    });
+
+    localStorage.setItem(
+        "rechargeHistory",
+        JSON.stringify(history)
+    );
+}
+
+
+function submitRecharge(type){
+
+    const mobile =
+        document.getElementById("mobile").value.trim();
+
+    const operator =
+        document.getElementById("operator").value;
+
+    const amount =
+        Number(document.getElementById("mobileAmount").value);
+
+    if(!/^[0-9]{10}$/.test(mobile)){
+
+        showMessage(
+            "Please enter a valid 10-digit mobile number.",
+            "error"
+        );
+
+        return;
+    }
+
+    if(!operator){
+
+        showMessage(
+            "Please select your operator.",
+            "error"
+        );
+
+        return;
+    }
+
+    if(!amount || amount < 10){
+
+        showMessage(
+            "Please enter a valid recharge amount.",
+            "error"
+        );
+
+        return;
+    }
+
+    saveHistory(
+        type,
+        mobile,
+        operator,
+        amount
+    );
+
+    showMessage(
+        "✓ Recharge request saved successfully.",
+        "success"
+    );
+}
+
+
+function submitDth(){
+
+    const operator =
+        document.getElementById("dthOperator").value;
+
+    const subscriber =
+        document.getElementById("subscriber").value.trim();
+
+    const amount =
+        Number(document.getElementById("dthAmount").value);
+
+    if(!operator){
+
+        showMessage(
+            "Please select your DTH operator.",
+            "error"
+        );
+
+        return;
+    }
+
+    if(!subscriber){
+
+        showMessage(
+            "Please enter your subscriber ID.",
+            "error"
+        );
+
+        return;
+    }
+
+    if(!amount || amount < 10){
+
+        showMessage(
+            "Please enter a valid amount.",
+            "error"
+        );
+
+        return;
+    }
+
+    saveHistory(
+        "DTH Recharge",
+        subscriber,
+        operator,
+        amount
+    );
+
+    showMessage(
+        "✓ DTH recharge request saved successfully.",
+        "success"
+    );
+}
+
+
+function submitPostpaid(){
+
+    const mobile =
+        document.getElementById("postpaidMobile").value.trim();
+
+    const operator =
+        document.getElementById("postpaidOperator").value;
+
+    const amount =
+        Number(document.getElementById("postpaidAmount").value);
+
+    if(!/^[0-9]{10}$/.test(mobile)){
+
+        showMessage(
+            "Please enter a valid 10-digit mobile number.",
+            "error"
+        );
+
+        return;
+    }
+
+    if(!operator){
+
+        showMessage(
+            "Please select your operator.",
+            "error"
+        );
+
+        return;
+    }
+
+    if(!amount || amount < 1){
+
+        showMessage(
+            "Please enter a valid bill amount.",
+            "error"
+        );
+
+        return;
+    }
+
+    saveHistory(
+        "Postpaid Bill",
+        mobile,
+        operator,
+        amount
+    );
+
+    showMessage(
+        "✓ Postpaid bill request saved successfully.",
+        "success"
+    );
+}
+
+</script>
+
+</body>
+</html>

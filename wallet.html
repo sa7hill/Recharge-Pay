@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Wallet</title>
+
+<style>
+*{
+    box-sizing:border-box;
+    margin:0;
+    padding:0;
+    font-family:Arial,sans-serif;
+}
+
+body{
+    background:#f5f7fb;
+    color:#17233d;
+    padding-bottom:30px;
+}
+
+.header{
+    background:linear-gradient(135deg,#147ff3,#7047e8);
+    color:white;
+    padding:20px 17px 30px;
+    border-radius:0 0 28px 28px;
+}
+
+.top{
+    display:flex;
+    align-items:center;
+    gap:14px;
+}
+
+.back{
+    width:42px;
+    height:42px;
+    border:0;
+    border-radius:13px;
+    background:rgba(255,255,255,.18);
+    color:white;
+    font-size:23px;
+}
+
+.header h2{
+    font-size:21px;
+}
+
+.header p{
+    margin-top:5px;
+    font-size:12px;
+    opacity:.8;
+}
+
+.wallet-card{
+    margin:20px 16px 0;
+    padding:23px;
+    border-radius:22px;
+    background:linear-gradient(135deg,#ffffff,#edf4ff);
+    box-shadow:0 8px 25px rgba(30,50,90,.09);
+}
+
+.wallet-card small{
+    color:#78859a;
+}
+
+.balance{
+    font-size:34px;
+    font-weight:bold;
+    margin-top:7px;
+}
+
+.wallet-actions{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:12px;
+    margin-top:20px;
+}
+
+.wallet-actions button{
+    height:48px;
+    border:0;
+    border-radius:13px;
+    background:#397ff1;
+    color:white;
+    font-weight:bold;
+}
+
+.wallet-actions button:last-child{
+    background:#eef4ff;
+    color:#3978ed;
+}
+
+.section{
+    padding:20px 16px 0;
+}
+
+.title{
+    font-size:18px;
+    font-weight:bold;
+    margin-bottom:13px;
+}
+
+.info-card{
+    background:white;
+    border-radius:18px;
+    padding:17px;
+    box-shadow:0 5px 18px rgba(30,50,90,.06);
+}
+
+.row{
+    display:flex;
+    justify-content:space-between;
+    padding:13px 0;
+    border-bottom:1px solid #edf0f5;
+    font-size:14px;
+}
+
+.row:last-child{
+    border-bottom:0;
+}
+
+.label{
+    color:#78859a;
+}
+
+.quick{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:10px;
+}
+
+.quick div{
+    background:white;
+    padding:17px 5px;
+    border-radius:16px;
+    text-align:center;
+    box-shadow:0 5px 18px rgba(30,50,90,.06);
+    cursor:pointer;
+}
+
+.quick span{
+    display:block;
+    font-size:23px;
+    margin-bottom:7px;
+}
+
+.quick p{
+    font-size:11px;
+    color:#66758b;
+}
+</style>
+</head>
+
+<body>
+
+<header class="header">
+
+    <div class="top">
+        <button class="back" onclick="goHome()">‹</button>
+
+        <div>
+            <h2>My Wallet</h2>
+            <p>Manage your wallet</p>
+        </div>
+    </div>
+
+</header>
+
+<div class="wallet-card">
+
+    <small>Available Balance</small>
+
+    <div class="balance">
+        ₹<span id="balance">0.00</span>
+    </div>
+
+    <div class="wallet-actions">
+        <button onclick="addMoney()">
+            + Add Money
+        </button>
+
+        <button onclick="historyPage()">
+            History
+        </button>
+    </div>
+
+</div>
+
+<section class="section">
+
+    <div class="title">Wallet Information</div>
+
+    <div class="info-card">
+
+        <div class="row">
+            <span class="label">Wallet Status</span>
+            <b>Active</b>
+        </div>
+
+        <div class="row">
+            <span class="label">Available Balance</span>
+            <b id="balance2">₹0.00</b>
+        </div>
+
+        <div class="row">
+            <span class="label">Transaction Limit</span>
+            <b>₹1,00,000</b>
+        </div>
+
+        <div class="row">
+            <span class="label">Daily Limit</span>
+            <b>₹1,00,000</b>
+        </div>
+
+    </div>
+
+</section>
+
+<section class="section">
+
+    <div class="title">Quick Access</div>
+
+    <div class="quick">
+
+        <div onclick="historyPage()">
+            <span>🧾</span>
+            <p>History</p>
+        </div>
+
+        <div onclick="requestMoney()">
+            <span>💸</span>
+            <p>Request</p>
+        </div>
+
+        <div onclick="openQR()">
+            <span>▣</span>
+            <p>My QR</p>
+        </div>
+
+    </div>
+
+</section>
+
+<script>
+
+function goHome(){
+    location.href="index.html";
+}
+
+function historyPage(){
+    location.href="history.html";
+}
+
+function addMoney(){
+    alert("Add Money interface opened.");
+}
+
+function requestMoney(){
+    alert("Payment request interface opened.");
+}
+
+function openQR(){
+    alert("QR interface opened.");
+}
+
+let balance=Number(localStorage.getItem("balance")||0);
+
+document.getElementById("balance").textContent=
+    balance.toFixed(2);
+
+document.getElementById("balance2").textContent=
+    "₹"+balance.toFixed(2);
+
+</script>
+
+</body>
+</html>

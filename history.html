@@ -1,0 +1,571 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Transaction History</title>
+
+<style>
+*{
+    box-sizing:border-box;
+    margin:0;
+    padding:0;
+    font-family:Arial,sans-serif;
+}
+
+body{
+    background:#f5f7fb;
+    color:#17233d;
+    padding-bottom:30px;
+}
+
+/* HEADER */
+.header{
+    background:linear-gradient(135deg,#147ff3,#7047e8);
+    color:white;
+    padding:20px 17px 25px;
+    border-radius:0 0 28px 28px;
+}
+
+.top{
+    display:flex;
+    align-items:center;
+    gap:15px;
+}
+
+.back{
+    width:42px;
+    height:42px;
+    border:0;
+    border-radius:13px;
+    background:rgba(255,255,255,.18);
+    color:white;
+    font-size:20px;
+    cursor:pointer;
+}
+
+.header h2{
+    font-size:21px;
+}
+
+.header p{
+    margin-top:5px;
+    font-size:12px;
+    opacity:.8;
+}
+
+/* SUMMARY */
+.summary{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:12px;
+    padding:18px 16px 5px;
+}
+
+.summary-card{
+    background:white;
+    padding:17px;
+    border-radius:17px;
+    box-shadow:0 5px 18px rgba(30,50,90,.07);
+}
+
+.summary-card small{
+    color:#7c8799;
+}
+
+.summary-card h3{
+    margin-top:7px;
+    font-size:19px;
+}
+
+.credit{
+    color:#14a36b;
+}
+
+.debit{
+    color:#e34b4b;
+}
+
+/* CONTROLS */
+.controls{
+    padding:15px 16px;
+}
+
+.search{
+    width:100%;
+    height:50px;
+    border:1px solid #dce2ec;
+    border-radius:14px;
+    padding:0 15px;
+    outline:none;
+    background:white;
+    font-size:14px;
+}
+
+.search:focus{
+    border-color:#397ff1;
+}
+
+.filters{
+    display:flex;
+    gap:8px;
+    overflow-x:auto;
+    margin-top:12px;
+}
+
+.filters button{
+    white-space:nowrap;
+    border:1px solid #dce2ec;
+    background:white;
+    padding:9px 15px;
+    border-radius:20px;
+    color:#617087;
+    cursor:pointer;
+}
+
+.filters button.active{
+    background:#397ff1;
+    color:white;
+    border-color:#397ff1;
+}
+
+/* HISTORY */
+.history{
+    padding:5px 16px;
+}
+
+.date{
+    font-size:12px;
+    color:#7d899b;
+    margin:15px 2px 9px;
+    font-weight:bold;
+}
+
+.transaction{
+    background:white;
+    padding:15px;
+    border-radius:17px;
+    display:flex;
+    align-items:center;
+    margin-bottom:9px;
+    box-shadow:0 4px 15px rgba(30,50,90,.06);
+    cursor:pointer;
+    transition:.2s;
+}
+
+.transaction:active{
+    transform:scale(.98);
+}
+
+.icon{
+    width:45px;
+    height:45px;
+    border-radius:14px;
+    background:#edf4ff;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:21px;
+    margin-right:12px;
+}
+
+.info{
+    flex:1;
+}
+
+.info h4{
+    font-size:14px;
+}
+
+.info p{
+    color:#8a94a5;
+    font-size:11px;
+    margin-top:5px;
+}
+
+.amount{
+    text-align:right;
+    font-weight:bold;
+    font-size:13px;
+}
+
+.credit-text{
+    color:#14a36b;
+}
+
+.debit-text{
+    color:#e34b4b;
+}
+
+.empty{
+    display:none;
+    text-align:center;
+    padding:45px 20px;
+    color:#7c8799;
+}
+
+.empty-icon{
+    font-size:42px;
+    margin-bottom:10px;
+}
+
+/* MODAL */
+.modal{
+    display:none;
+    position:fixed;
+    inset:0;
+    background:rgba(0,0,0,.45);
+    align-items:flex-end;
+    z-index:20;
+}
+
+.modal-box{
+    width:100%;
+    max-width:500px;
+    margin:auto;
+    background:white;
+    border-radius:25px 25px 0 0;
+    padding:24px;
+    animation:up .25s ease;
+}
+
+.close{
+    float:right;
+    border:0;
+    width:32px;
+    height:32px;
+    border-radius:50%;
+    background:#f0f2f6;
+}
+
+.details{
+    margin-top:20px;
+    line-height:28px;
+    color:#59677e;
+    font-size:14px;
+}
+
+@keyframes up{
+    from{
+        transform:translateY(100%);
+    }
+    to{
+        transform:translateY(0);
+    }
+}
+</style>
+</head>
+
+<body>
+
+<header class="header">
+
+    <div class="top">
+
+        <button class="back"
+                onclick="goHome()">‹</button>
+
+        <div>
+            <h2>Transaction History</h2>
+            <p>View your account activity</p>
+        </div>
+
+    </div>
+
+</header>
+
+
+<!-- SUMMARY -->
+<section class="summary">
+
+    <div class="summary-card">
+        <small>Total Received</small>
+        <h3 class="credit">₹0.00</h3>
+    </div>
+
+    <div class="summary-card">
+        <small>Total Spent</small>
+        <h3 class="debit">₹0.00</h3>
+    </div>
+
+</section>
+
+
+<!-- SEARCH + FILTER -->
+<section class="controls">
+
+    <input
+        class="search"
+        id="search"
+        type="search"
+        placeholder="Search transactions..."
+        oninput="filterTransactions()">
+
+    <div class="filters">
+
+        <button class="active"
+                onclick="setFilter('all',this)">
+            All
+        </button>
+
+        <button onclick="setFilter('credit',this)">
+            Received
+        </button>
+
+        <button onclick="setFilter('debit',this)">
+            Spent
+        </button>
+
+        <button onclick="setFilter('recharge',this)">
+            Recharge
+        </button>
+
+    </div>
+
+</section>
+
+
+<!-- HISTORY -->
+<section class="history">
+
+    <div id="today">
+
+        <div class="date">TODAY</div>
+
+        <div class="transaction"
+             data-type="credit"
+             data-name="Money Received"
+             onclick="details('Money Received','₹500.00','Received','Today')">
+
+            <div class="icon">💰</div>
+
+            <div class="info">
+                <h4>Money Received</h4>
+                <p>Payment received</p>
+            </div>
+
+            <div class="amount credit-text">
+                +₹500.00
+            </div>
+
+        </div>
+
+
+        <div class="transaction"
+             data-type="debit"
+             data-name="Mobile Recharge"
+             onclick="details('Mobile Recharge','₹199.00','Recharge','Today')">
+
+            <div class="icon">📱</div>
+
+            <div class="info">
+                <h4>Mobile Recharge</h4>
+                <p>Prepaid recharge</p>
+            </div>
+
+            <div class="amount debit-text">
+                -₹199.00
+            </div>
+
+        </div>
+
+
+        <div class="transaction"
+             data-type="debit"
+             data-name="DTH Recharge"
+             onclick="details('DTH Recharge','₹299.00','Recharge','Today')">
+
+            <div class="icon">📺</div>
+
+            <div class="info">
+                <h4>DTH Recharge</h4>
+                <p>DTH payment</p>
+            </div>
+
+            <div class="amount debit-text">
+                -₹299.00
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <div id="empty" class="empty">
+
+        <div class="empty-icon">🧾</div>
+
+        <h3>No transactions found</h3>
+
+        <p>Try another search or filter.</p>
+
+    </div>
+
+</section>
+
+
+<!-- DETAILS MODAL -->
+<div class="modal" id="modal">
+
+    <div class="modal-box">
+
+        <button class="close"
+                onclick="closeModal()">✕</button>
+
+        <h2 id="detailTitle">Transaction</h2>
+
+        <div class="details">
+
+            <p>
+                <b>Amount:</b>
+                <span id="detailAmount"></span>
+            </p>
+
+            <p>
+                <b>Type:</b>
+                <span id="detailType"></span>
+            </p>
+
+            <p>
+                <b>Date:</b>
+                <span id="detailDate"></span>
+            </p>
+
+            <p>
+                <b>Status:</b> Completed
+            </p>
+
+            <p>
+                <b>Reference:</b>
+                TXN-DEMO-001
+            </p>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<script>
+
+let currentFilter="all";
+
+function goHome(){
+    window.location.href="index.html";
+}
+
+
+/* FILTER */
+
+function setFilter(type,button){
+
+    currentFilter=type;
+
+    document
+    .querySelectorAll(".filters button")
+    .forEach(btn=>{
+        btn.classList.remove("active");
+    });
+
+    button.classList.add("active");
+
+    filterTransactions();
+}
+
+
+function filterTransactions(){
+
+    const search =
+        document.getElementById("search")
+        .value
+        .toLowerCase()
+        .trim();
+
+    const transactions =
+        document.querySelectorAll(".transaction");
+
+    let visible=0;
+
+    transactions.forEach(item=>{
+
+        const type=item.dataset.type;
+        const name=item.dataset.name.toLowerCase();
+
+        const matchesSearch =
+            name.includes(search);
+
+        let matchesFilter=true;
+
+        if(currentFilter==="credit"){
+            matchesFilter=type==="credit";
+        }
+
+        if(currentFilter==="debit"){
+            matchesFilter=type==="debit";
+        }
+
+        if(currentFilter==="recharge"){
+            matchesFilter=name.includes("recharge");
+        }
+
+        if(matchesSearch && matchesFilter){
+
+            item.style.display="flex";
+            visible++;
+
+        }else{
+
+            item.style.display="none";
+
+        }
+
+    });
+
+    document.getElementById("empty")
+        .style.display =
+        visible===0 ? "block" : "none";
+}
+
+
+/* DETAILS */
+
+function details(title,amount,type,date){
+
+    document.getElementById("detailTitle")
+        .textContent=title;
+
+    document.getElementById("detailAmount")
+        .textContent=amount;
+
+    document.getElementById("detailType")
+        .textContent=type;
+
+    document.getElementById("detailDate")
+        .textContent=date;
+
+    document.getElementById("modal")
+        .style.display="flex";
+}
+
+
+function closeModal(){
+
+    document.getElementById("modal")
+        .style.display="none";
+}
+
+
+document.getElementById("modal")
+.addEventListener("click",function(e){
+
+    if(e.target===this){
+        closeModal();
+    }
+
+});
+
+</script>
+
+</body>
+</html>

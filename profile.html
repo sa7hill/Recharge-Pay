@@ -1,0 +1,896 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Profile</title>
+
+<style>
+*{
+    box-sizing:border-box;
+    margin:0;
+    padding:0;
+}
+
+body{
+    font-family:Arial,sans-serif;
+    background:#f4f7fc;
+    color:#17233c;
+    min-height:100vh;
+}
+
+/* HEADER */
+.header{
+    background:linear-gradient(135deg,#167ff5,#7047e8);
+    color:white;
+    padding:22px 20px 65px;
+    border-radius:0 0 35px 35px;
+}
+
+.header-top{
+    display:flex;
+    align-items:center;
+    gap:14px;
+}
+
+.back-btn{
+    width:45px;
+    height:45px;
+    border:0;
+    border-radius:14px;
+    background:rgba(255,255,255,.18);
+    color:white;
+    font-size:25px;
+    cursor:pointer;
+}
+
+.header h1{
+    font-size:26px;
+}
+
+/* PROFILE CARD */
+.profile-card{
+    width:calc(100% - 36px);
+    margin:-35px auto 25px;
+    background:white;
+    border-radius:25px;
+    padding:30px 20px;
+    text-align:center;
+    box-shadow:0 12px 35px rgba(35,60,110,.12);
+}
+
+.avatar{
+    width:105px;
+    height:105px;
+    margin:auto;
+    border-radius:50%;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:58px;
+    background:linear-gradient(135deg,#287ff0,#654bea);
+    box-shadow:0 10px 25px rgba(50,90,220,.25);
+}
+
+.profile-card h2{
+    margin-top:15px;
+    font-size:27px;
+}
+
+.profile-card p{
+    margin-top:7px;
+    color:#718096;
+}
+
+/* SECTIONS */
+.section{
+    width:calc(100% - 36px);
+    margin:0 auto 25px;
+}
+
+.section-title{
+    font-size:22px;
+    margin-bottom:13px;
+}
+
+/* MENU */
+.menu{
+    background:white;
+    border-radius:20px;
+    overflow:hidden;
+    box-shadow:0 8px 25px rgba(35,60,110,.08);
+}
+
+.menu-item{
+    width:100%;
+    min-height:75px;
+    display:flex;
+    align-items:center;
+    gap:15px;
+    padding:13px 18px;
+    background:white;
+    border:0;
+    border-bottom:1px solid #edf0f5;
+    text-align:left;
+    cursor:pointer;
+}
+
+.menu-item:last-child{
+    border-bottom:0;
+}
+
+.menu-icon{
+    width:48px;
+    height:48px;
+    border-radius:14px;
+    background:#eef4ff;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:25px;
+    flex-shrink:0;
+}
+
+.menu-text{
+    flex:1;
+}
+
+.menu-text strong{
+    display:block;
+    font-size:16px;
+    margin-bottom:4px;
+}
+
+.menu-text span{
+    color:#8994a7;
+    font-size:13px;
+}
+
+.arrow{
+    color:#8a94a7;
+    font-size:22px;
+}
+
+/* LOGOUT */
+.logout{
+    width:calc(100% - 36px);
+    height:58px;
+    margin:5px auto 30px;
+    display:block;
+    border:0;
+    border-radius:17px;
+    background:#fff1f1;
+    color:#d93636;
+    font-size:17px;
+    font-weight:bold;
+    cursor:pointer;
+}
+
+/* BOTTOM NAV */
+.bottom-nav{
+    position:fixed;
+    bottom:0;
+    left:0;
+    right:0;
+    height:76px;
+    background:rgba(255,255,255,.97);
+    border-top:1px solid #e8ebf1;
+    display:flex;
+    justify-content:space-around;
+    align-items:center;
+    z-index:100;
+}
+
+.nav-btn{
+    border:0;
+    background:none;
+    color:#7d8798;
+    font-size:12px;
+    cursor:pointer;
+    text-align:center;
+}
+
+.nav-btn div{
+    font-size:25px;
+    margin-bottom:3px;
+}
+
+.nav-btn.active{
+    color:#287ff0;
+    font-weight:bold;
+}
+
+/* MODAL */
+.modal{
+    display:none;
+    position:fixed;
+    inset:0;
+    background:rgba(0,0,0,.55);
+    align-items:flex-end;
+    justify-content:center;
+    z-index:9999;
+}
+
+.modal.show{
+    display:flex;
+}
+
+.modal-box{
+    width:100%;
+    max-width:520px;
+    background:white;
+    border-radius:28px 28px 0 0;
+    padding:25px 22px 30px;
+    animation:slideUp .25s ease;
+}
+
+@keyframes slideUp{
+    from{
+        transform:translateY(100%);
+    }
+    to{
+        transform:translateY(0);
+    }
+}
+
+.modal-head{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-bottom:20px;
+}
+
+.modal-head h2{
+    font-size:23px;
+}
+
+.close{
+    width:40px;
+    height:40px;
+    border:0;
+    border-radius:50%;
+    background:#f1f3f7;
+    font-size:24px;
+    cursor:pointer;
+}
+
+.modal-input{
+    width:100%;
+    height:55px;
+    border:1px solid #d7deea;
+    border-radius:14px;
+    padding:0 15px;
+    margin-bottom:12px;
+    font-size:17px;
+    outline:none;
+}
+
+.modal-input:focus{
+    border-color:#397ff0;
+}
+
+.primary-btn{
+    width:100%;
+    height:55px;
+    border:0;
+    border-radius:15px;
+    background:linear-gradient(100deg,#168ff5,#7047e8);
+    color:white;
+    font-size:17px;
+    font-weight:bold;
+    cursor:pointer;
+    margin-top:5px;
+}
+
+.modal-message{
+    text-align:center;
+    margin-top:13px;
+    min-height:20px;
+    font-weight:bold;
+}
+
+/* TOGGLE */
+.setting-row{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    padding:16px 0;
+    border-bottom:1px solid #edf0f5;
+}
+
+.toggle{
+    width:50px;
+    height:28px;
+    border-radius:20px;
+    background:#cbd2dc;
+    position:relative;
+    cursor:pointer;
+}
+
+.toggle::after{
+    content:"";
+    width:22px;
+    height:22px;
+    background:white;
+    border-radius:50%;
+    position:absolute;
+    top:3px;
+    left:4px;
+    transition:.2s;
+}
+
+.toggle.on{
+    background:#287ff0;
+}
+
+.toggle.on::after{
+    left:24px;
+}
+
+/* SAFE AREA */
+.page-space{
+    height:100px;
+}
+</style>
+</head>
+
+<body>
+
+<!-- HEADER -->
+<header class="header">
+
+    <div class="header-top">
+
+        <button class="back-btn" onclick="goHome()">
+            ←
+        </button>
+
+        <h1>Profile</h1>
+
+    </div>
+
+</header>
+
+
+<!-- PROFILE -->
+<div class="profile-card">
+
+    <div class="avatar">
+        👤
+    </div>
+
+    <h2 id="profileName">User</h2>
+
+    <p id="profileEmail">
+        user@example.com
+    </p>
+
+</div>
+
+
+<!-- ACCOUNT -->
+<section class="section">
+
+    <h2 class="section-title">
+        Account
+    </h2>
+
+    <div class="menu">
+
+        <button class="menu-item" onclick="openPin()">
+
+            <div class="menu-icon">
+                🔐
+            </div>
+
+            <div class="menu-text">
+                <strong>Security PIN</strong>
+                <span>Manage your security PIN</span>
+            </div>
+
+            <div class="arrow">›</div>
+
+        </button>
+
+
+        <button class="menu-item" onclick="openLimits()">
+
+            <div class="menu-icon">
+                🛡️
+            </div>
+
+            <div class="menu-text">
+                <strong>Account Limits</strong>
+                <span>View transaction limits</span>
+            </div>
+
+            <div class="arrow">›</div>
+
+        </button>
+
+    </div>
+
+</section>
+
+
+<!-- PREFERENCES -->
+<section class="section">
+
+    <h2 class="section-title">
+        Preferences
+    </h2>
+
+    <div class="menu">
+
+        <button class="menu-item" onclick="openNotifications()">
+
+            <div class="menu-icon">
+                🔔
+            </div>
+
+            <div class="menu-text">
+                <strong>Notifications</strong>
+                <span>Manage notifications</span>
+            </div>
+
+            <div class="arrow">›</div>
+
+        </button>
+
+
+        <button class="menu-item" onclick="openSettings()">
+
+            <div class="menu-icon">
+                ⚙️
+            </div>
+
+            <div class="menu-text">
+                <strong>Settings</strong>
+                <span>App preferences</span>
+            </div>
+
+            <div class="arrow">›</div>
+
+        </button>
+
+    </div>
+
+</section>
+
+
+<!-- LOGOUT -->
+<button class="logout" onclick="logout()">
+    Log Out
+</button>
+
+
+<div class="page-space"></div>
+
+
+<!-- BOTTOM NAV -->
+<nav class="bottom-nav">
+
+    <button class="nav-btn" onclick="goHome()">
+        <div>⌂</div>
+        Home
+    </button>
+
+    <button class="nav-btn" onclick="goHistory()">
+        <div>🧾</div>
+        History
+    </button>
+
+    <button class="nav-btn" onclick="goWallet()">
+        <div>👛</div>
+        Wallet
+    </button>
+
+    <button class="nav-btn active">
+        <div>👤</div>
+        Profile
+    </button>
+
+</nav>
+
+
+<!-- SECURITY PIN MODAL -->
+<div class="modal" id="pinModal">
+
+    <div class="modal-box">
+
+        <div class="modal-head">
+
+            <h2>🔐 Security PIN</h2>
+
+            <button class="close" onclick="closeModal('pinModal')">
+                ×
+            </button>
+
+        </div>
+
+        <p style="color:#718096;margin-bottom:18px;">
+            Set or change your 4-digit security PIN.
+        </p>
+
+        <input
+            class="modal-input"
+            id="newPin"
+            type="password"
+            inputmode="numeric"
+            maxlength="4"
+            placeholder="Enter 4-digit PIN"
+        >
+
+        <input
+            class="modal-input"
+            id="confirmPin"
+            type="password"
+            inputmode="numeric"
+            maxlength="4"
+            placeholder="Confirm 4-digit PIN"
+        >
+
+        <button class="primary-btn" onclick="savePin()">
+            Save PIN
+        </button>
+
+        <div class="modal-message" id="pinMessage"></div>
+
+    </div>
+
+</div>
+
+
+<!-- LIMIT MODAL -->
+<div class="modal" id="limitsModal">
+
+    <div class="modal-box">
+
+        <div class="modal-head">
+
+            <h2>🛡️ Account Limits</h2>
+
+            <button class="close" onclick="closeModal('limitsModal')">
+                ×
+            </button>
+
+        </div>
+
+        <div class="setting-row">
+            <span>Per transaction</span>
+            <strong>₹1,00,000</strong>
+        </div>
+
+        <div class="setting-row">
+            <span>Daily limit</span>
+            <strong>₹1,00,000</strong>
+        </div>
+
+        <button class="primary-btn"
+                onclick="closeModal('limitsModal')">
+            Done
+        </button>
+
+    </div>
+
+</div>
+
+
+<!-- NOTIFICATION MODAL -->
+<div class="modal" id="notificationModal">
+
+    <div class="modal-box">
+
+        <div class="modal-head">
+
+            <h2>🔔 Notifications</h2>
+
+            <button class="close"
+                    onclick="closeModal('notificationModal')">
+                ×
+            </button>
+
+        </div>
+
+        <div class="setting-row">
+
+            <div>
+                <strong>Payment notifications</strong>
+                <br>
+                <small style="color:#8994a7;">
+                    Receive payment updates
+                </small>
+            </div>
+
+            <div
+                class="toggle on"
+                onclick="toggleSwitch(this)">
+            </div>
+
+        </div>
+
+        <div class="setting-row">
+
+            <div>
+                <strong>Recharge notifications</strong>
+                <br>
+                <small style="color:#8994a7;">
+                    Receive recharge updates
+                </small>
+            </div>
+
+            <div
+                class="toggle on"
+                onclick="toggleSwitch(this)">
+            </div>
+
+        </div>
+
+        <button class="primary-btn"
+                onclick="closeModal('notificationModal')">
+            Done
+        </button>
+
+    </div>
+
+</div>
+
+
+<!-- SETTINGS MODAL -->
+<div class="modal" id="settingsModal">
+
+    <div class="modal-box">
+
+        <div class="modal-head">
+
+            <h2>⚙️ Settings</h2>
+
+            <button class="close"
+                    onclick="closeModal('settingsModal')">
+                ×
+            </button>
+
+        </div>
+
+        <div class="setting-row">
+
+            <div>
+                <strong>Dark Mode</strong>
+                <br>
+                <small style="color:#8994a7;">
+                    Change app appearance
+                </small>
+            </div>
+
+            <div
+                class="toggle"
+                id="darkToggle"
+                onclick="toggleDarkMode(this)">
+            </div>
+
+        </div>
+
+        <div class="setting-row">
+
+            <div>
+                <strong>Remember Login</strong>
+                <br>
+                <small style="color:#8994a7;">
+                    Keep login information
+                </small>
+            </div>
+
+            <div
+                class="toggle on"
+                onclick="toggleSwitch(this)">
+            </div>
+
+        </div>
+
+        <button class="primary-btn"
+                onclick="closeModal('settingsModal')">
+            Save Settings
+        </button>
+
+    </div>
+
+</div>
+
+
+<script>
+
+/* =========================
+   PAGE NAVIGATION
+========================= */
+
+function goHome(){
+    window.location.href = "home.html";
+}
+
+function goHistory(){
+    window.location.href = "history.html";
+}
+
+function goWallet(){
+    window.location.href = "wallet.html";
+}
+
+
+/* =========================
+   MODAL SYSTEM
+========================= */
+
+function openModal(id){
+    document.getElementById(id).classList.add("show");
+}
+
+function closeModal(id){
+    document.getElementById(id).classList.remove("show");
+}
+
+
+/* =========================
+   SECURITY PIN
+========================= */
+
+function openPin(){
+    openModal("pinModal");
+}
+
+function savePin(){
+
+    const pin =
+        document.getElementById("newPin").value.trim();
+
+    const confirmPin =
+        document.getElementById("confirmPin").value.trim();
+
+    const msg =
+        document.getElementById("pinMessage");
+
+    if(!/^[0-9]{4}$/.test(pin)){
+
+        msg.style.color="#e53935";
+
+        msg.textContent =
+            "PIN must contain exactly 4 digits.";
+
+        return;
+    }
+
+    if(pin !== confirmPin){
+
+        msg.style.color="#e53935";
+
+        msg.textContent =
+            "PINs do not match.";
+
+        return;
+    }
+
+    localStorage.setItem(
+        "securityPin",
+        pin
+    );
+
+    msg.style.color="#159957";
+
+    msg.textContent =
+        "Security PIN saved successfully!";
+
+    document.getElementById("newPin").value="";
+    document.getElementById("confirmPin").value="";
+
+}
+
+
+/* =========================
+   LIMITS
+========================= */
+
+function openLimits(){
+    openModal("limitsModal");
+}
+
+
+/* =========================
+   NOTIFICATIONS
+========================= */
+
+function openNotifications(){
+    openModal("notificationModal");
+}
+
+
+/* =========================
+   SETTINGS
+========================= */
+
+function openSettings(){
+    openModal("settingsModal");
+}
+
+
+/* =========================
+   TOGGLE
+========================= */
+
+function toggleSwitch(element){
+
+    element.classList.toggle("on");
+
+}
+
+
+/* =========================
+   DARK MODE
+========================= */
+
+function toggleDarkMode(element){
+
+    element.classList.toggle("on");
+
+    document.body.classList.toggle("dark");
+
+}
+
+
+/* =========================
+   LOGOUT
+========================= */
+
+function logout(){
+
+    localStorage.removeItem("loggedIn");
+
+    window.location.href = "index.html";
+
+}
+
+
+/* =========================
+   LOAD USER DATA
+========================= */
+
+document.addEventListener("DOMContentLoaded",function(){
+
+    const name =
+        localStorage.getItem("userName");
+
+    const email =
+        localStorage.getItem("userEmail");
+
+    if(name){
+        document.getElementById("profileName")
+            .textContent = name;
+    }
+
+    if(email){
+        document.getElementById("profileEmail")
+            .textContent = email;
+    }
+
+});
+
+
+/* =========================
+   CLOSE MODAL BY OUTSIDE CLICK
+========================= */
+
+document.querySelectorAll(".modal").forEach(function(modal){
+
+    modal.addEventListener("click",function(e){
+
+        if(e.target === modal){
+            modal.classList.remove("show");
+        }
+
+    });
+
+});
+
+</script>
+
+</body>
+</html>

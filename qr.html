@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>My QR</title>
+
+<style>
+*{
+    box-sizing:border-box;
+    margin:0;
+    padding:0;
+    font-family:Arial,sans-serif;
+}
+
+body{
+    background:#f5f7fb;
+    color:#17233d;
+}
+
+.header{
+    background:linear-gradient(135deg,#147ff3,#7047e8);
+    color:white;
+    padding:20px 17px 28px;
+    border-radius:0 0 28px 28px;
+}
+
+.top{
+    display:flex;
+    align-items:center;
+    gap:14px;
+}
+
+.back{
+    width:42px;
+    height:42px;
+    border:0;
+    border-radius:13px;
+    background:rgba(255,255,255,.18);
+    color:white;
+    font-size:23px;
+}
+
+.qr-card{
+    width:92%;
+    max-width:390px;
+    margin:25px auto;
+    padding:25px;
+    background:white;
+    border-radius:24px;
+    text-align:center;
+    box-shadow:0 8px 25px rgba(30,50,90,.09);
+}
+
+.qr-box{
+    width:230px;
+    height:230px;
+    margin:5px auto 20px;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    background:#fff;
+    border:10px solid #fff;
+    box-shadow:0 4px 15px rgba(0,0,0,.12);
+}
+
+#qrImage{
+    width:210px;
+    height:210px;
+    image-rendering:auto;
+}
+
+.qr-card h2{
+    font-size:21px;
+}
+
+.qr-card p{
+    color:#78859a;
+    font-size:13px;
+    margin-top:7px;
+}
+
+.actions{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:11px;
+    margin-top:20px;
+}
+
+.actions button{
+    height:48px;
+    border:0;
+    border-radius:13px;
+    background:#397ff1;
+    color:white;
+    font-weight:bold;
+}
+
+.actions button:last-child{
+    background:#edf4ff;
+    color:#3978ed;
+}
+
+.info{
+    width:92%;
+    max-width:390px;
+    margin:auto;
+    background:white;
+    border-radius:18px;
+    padding:17px;
+    box-shadow:0 5px 18px rgba(30,50,90,.06);
+}
+
+.row{
+    display:flex;
+    justify-content:space-between;
+    padding:10px 0;
+    font-size:13px;
+}
+
+.row span{
+    color:#78859a;
+}
+
+@media(max-width:350px){
+    .qr-box{
+        width:200px;
+        height:200px;
+    }
+
+    #qrImage{
+        width:180px;
+        height:180px;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<header class="header">
+
+    <div class="top">
+        <button class="back" onclick="goHome()">‹</button>
+
+        <div>
+            <h2>My QR</h2>
+            <p>Receive payments using your QR</p>
+        </div>
+    </div>
+
+</header>
+
+
+<div class="qr-card">
+
+    <div class="qr-box">
+        <img id="qrImage" alt="QR Code">
+    </div>
+
+    <h2 id="userName">User</h2>
+
+    <p id="paymentId">
+        user@example
+    </p>
+
+    <div class="actions">
+
+        <button onclick="downloadQR()">
+            Save QR
+        </button>
+
+        <button onclick="shareQR()">
+            Share
+        </button>
+
+    </div>
+
+</div>
+
+
+<div class="info">
+
+    <div class="row">
+        <span>Account</span>
+        <b id="accountName">User</b>
+    </div>
+
+    <div class="row">
+        <span>Status</span>
+        <b>Active</b>
+    </div>
+
+    <div class="row">
+        <span>QR Type</span>
+        <b>Personal</b>
+    </div>
+
+</div>
+
+
+<script>
+
+const name =
+    localStorage.getItem("userName") || "User";
+
+const mobile =
+    localStorage.getItem("mobile") || "0000000000";
+
+/*
+ Frontend-generated example QR.
+ Replace the text below with your authorised
+ payment-provider QR data when integrating
+ a real payment system.
+*/
+
+const qrData =
+    "PAYMENT-DEMO:" + mobile;
+
+const qrImage =
+    document.getElementById("qrImage");
+
+qrImage.src =
+    "https://api.qrserver.com/v1/create-qr-code/?size=300x300&data="
+    + encodeURIComponent(qrData);
+
+document.getElementById("userName")
+    .textContent=name;
+
+document.getElementById("accountName")
+    .textContent=name;
+
+document.getElementById("paymentId")
+    .textContent="Account: " + mobile;
+
+
+function goHome(){
+    location.href="index.html";
+}
+
+
+function downloadQR(){
+
+    const link=document.createElement("a");
+
+    link.href=qrImage.src;
+    link.download="my-qr.png";
+
+    document.body.appendChild(link);
+    link.click();
+    link.remove();
+}
+
+
+async function shareQR(){
+
+    if(navigator.share){
+
+        try{
+
+            await navigator.share({
+                title:"My QR",
+                text:"My payment QR"
+            });
+
+        }catch(e){}
+
+    }else{
+
+        alert("Sharing is not supported on this device.");
+
+    }
+}
+
+</script>
+
+</body>
+</html>

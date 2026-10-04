@@ -1,0 +1,598 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Recharge Pay - Login</title>
+
+<style>
+*{
+    box-sizing:border-box;
+    margin:0;
+    padding:0;
+}
+
+body{
+    min-height:100vh;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    font-family:Arial,sans-serif;
+    background:linear-gradient(135deg,#eaf4ff,#f5edff);
+    overflow:hidden;
+}
+
+body::before,
+body::after{
+    content:"";
+    position:fixed;
+    border-radius:50%;
+    filter:blur(5px);
+    z-index:-1;
+}
+
+body::before{
+    width:250px;
+    height:250px;
+    background:#b9d9ff;
+    top:-80px;
+    left:-80px;
+}
+
+body::after{
+    width:300px;
+    height:300px;
+    background:#d8c4ff;
+    bottom:-120px;
+    right:-100px;
+}
+
+.login-card{
+    width:390px;
+    max-width:92%;
+    padding:32px 28px;
+    background:rgba(255,255,255,.9);
+    border:1px solid rgba(255,255,255,.8);
+    border-radius:28px;
+    box-shadow:0 25px 60px rgba(53,86,150,.18);
+    animation:pageEnter .8s ease forwards;
+}
+
+@keyframes pageEnter{
+    from{
+        opacity:0;
+        transform:translateY(45px);
+    }
+    to{
+        opacity:1;
+        transform:translateY(0);
+    }
+}
+
+.logo{
+    width:90px;
+    height:90px;
+    margin:0 auto 20px;
+    border-radius:50%;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:42px;
+    background:linear-gradient(135deg,#287ff0,#654bea);
+    box-shadow:0 12px 30px rgba(59,99,230,.3);
+    animation:logoPulse 2.5s ease-in-out infinite;
+}
+
+@keyframes logoPulse{
+    0%,100%{
+        transform:scale(1);
+    }
+    50%{
+        transform:scale(1.05);
+    }
+}
+
+h1{
+    text-align:center;
+    color:#173568;
+    font-size:30px;
+    margin-bottom:8px;
+}
+
+.subtitle{
+    text-align:center;
+    color:#64748b;
+    margin-bottom:26px;
+}
+
+.input-group{
+    position:relative;
+    margin-bottom:16px;
+}
+
+.input-group input{
+    width:100%;
+    height:62px;
+    padding:24px 45px 8px 48px;
+    border:1.5px solid #d6dfef;
+    border-radius:16px;
+    outline:none;
+    font-size:15px;
+    color:#23395d;
+    background:#fff;
+    transition:.3s ease;
+}
+
+.input-group input:focus{
+    border-color:#4389ff;
+    transform:translateY(-2px);
+    box-shadow:0 0 0 4px rgba(67,137,255,.13);
+}
+
+.input-group label{
+    position:absolute;
+    left:48px;
+    top:10px;
+    font-size:12px;
+    color:#71809b;
+    pointer-events:none;
+}
+
+.input-icon{
+    position:absolute;
+    left:17px;
+    top:20px;
+    font-size:21px;
+}
+
+.eye{
+    position:absolute;
+    right:17px;
+    top:21px;
+    cursor:pointer;
+    font-size:19px;
+    user-select:none;
+}
+
+.options{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin:10px 2px 22px;
+    font-size:13px;
+}
+
+.remember{
+    display:flex;
+    gap:7px;
+    align-items:center;
+    color:#53657f;
+}
+
+.remember input{
+    accent-color:#397ff2;
+}
+
+.forgot{
+    color:#3778ed;
+    cursor:pointer;
+    font-weight:500;
+}
+
+.login-btn{
+    width:100%;
+    height:58px;
+    border:0;
+    border-radius:16px;
+    background:linear-gradient(100deg,#168ff5,#7047e8);
+    color:white;
+    font-size:17px;
+    font-weight:bold;
+    cursor:pointer;
+    position:relative;
+    overflow:hidden;
+    transition:.25s ease;
+    box-shadow:0 10px 25px rgba(65,105,230,.25);
+}
+
+.login-btn::before{
+    content:"";
+    position:absolute;
+    width:70px;
+    height:100%;
+    left:-100px;
+    top:0;
+    background:rgba(255,255,255,.3);
+    transform:skewX(-25deg);
+    transition:.5s;
+}
+
+.login-btn:hover::before{
+    left:120%;
+}
+
+.login-btn:hover{
+    transform:translateY(-3px);
+    box-shadow:0 15px 30px rgba(65,105,230,.35);
+}
+
+.login-btn:active{
+    transform:scale(.97);
+}
+
+.divider{
+    display:flex;
+    align-items:center;
+    gap:12px;
+    margin:25px 0;
+    color:#8b98ad;
+    font-size:13px;
+}
+
+.divider span{
+    flex:1;
+    height:1px;
+    background:#dfe5ef;
+}
+
+.register{
+    text-align:center;
+    color:#63718a;
+    font-size:14px;
+}
+
+.register a{
+    color:#3c72ed;
+    font-weight:bold;
+    text-decoration:none;
+    cursor:pointer;
+}
+
+.message{
+    text-align:center;
+    margin-top:15px;
+    min-height:18px;
+    font-size:14px;
+    font-weight:bold;
+}
+
+@media(max-width:480px){
+
+    .login-card{
+        padding:28px 20px;
+        border-radius:24px;
+    }
+
+    h1{
+        font-size:26px;
+    }
+
+    .logo{
+        width:78px;
+        height:78px;
+        font-size:35px;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<div class="login-card">
+
+    <div class="logo">🔐</div>
+
+    <h1>Welcome Back</h1>
+
+    <p class="subtitle">
+        Login to your account
+    </p>
+
+    <form id="loginForm">
+
+        <!-- Mobile -->
+        <div class="input-group">
+
+            <span class="input-icon">📱</span>
+
+            <label>Mobile Number</label>
+
+            <input
+                type="tel"
+                id="mobile"
+                placeholder="98765 43210"
+                maxlength="10"
+                inputmode="numeric"
+                autocomplete="tel"
+                required
+            >
+
+        </div>
+
+
+        <!-- Password -->
+        <div class="input-group">
+
+            <span class="input-icon">🔒</span>
+
+            <label>Password</label>
+
+            <input
+                type="password"
+                id="password"
+                placeholder="Enter password"
+                autocomplete="current-password"
+                required
+            >
+
+            <span
+                class="eye"
+                id="eyeButton"
+                onclick="togglePassword()"
+            >👁️</span>
+
+        </div>
+
+
+        <!-- Options -->
+        <div class="options">
+
+            <label class="remember">
+
+                <input
+                    type="checkbox"
+                    id="rememberMe"
+                >
+
+                Remember me
+
+            </label>
+
+
+            <span
+                class="forgot"
+                onclick="forgotPassword()"
+            >
+                Forgot Password?
+            </span>
+
+        </div>
+
+
+        <!-- Login -->
+        <button
+            class="login-btn"
+            type="submit"
+        >
+            Login &nbsp; →
+        </button>
+
+    </form>
+
+
+    <div
+        class="message"
+        id="message"
+    ></div>
+
+
+    <!-- Divider -->
+    <div class="divider">
+
+        <span></span>
+
+        OR
+
+        <span></span>
+
+    </div>
+
+
+    <!-- Register -->
+    <div class="register">
+
+        Don't have an account?
+
+        <a
+            href="register.html"
+            onclick="registerPage(event)"
+        >
+            Register
+        </a>
+
+    </div>
+
+</div>
+
+
+<script>
+
+/* =========================
+   PASSWORD SHOW / HIDE
+========================= */
+
+function togglePassword(){
+
+    const password =
+        document.getElementById("password");
+
+    const eye =
+        document.getElementById("eyeButton");
+
+    if(password.type === "password"){
+
+        password.type = "text";
+
+        eye.textContent = "🙈";
+
+    }else{
+
+        password.type = "password";
+
+        eye.textContent = "👁️";
+
+    }
+}
+
+
+/* =========================
+   LOGIN
+========================= */
+
+document
+.getElementById("loginForm")
+.addEventListener("submit", function(e){
+
+    e.preventDefault();
+
+    const mobile =
+        document
+        .getElementById("mobile")
+        .value
+        .replace(/\D/g,"");
+
+    const password =
+        document
+        .getElementById("password")
+        .value
+        .trim();
+
+    const remember =
+        document
+        .getElementById("rememberMe")
+        .checked;
+
+    const message =
+        document
+        .getElementById("message");
+
+
+    /* Mobile validation */
+
+    if(!/^[0-9]{10}$/.test(mobile)){
+
+        message.style.color = "#e53935";
+
+        message.textContent =
+            "Enter a valid 10-digit mobile number.";
+
+        return;
+    }
+
+
+    /* Password validation */
+
+    if(password.length < 4){
+
+        message.style.color = "#e53935";
+
+        message.textContent =
+            "Password must be at least 4 characters.";
+
+        return;
+    }
+
+
+    /* Save login state for this front-end prototype */
+
+    sessionStorage.setItem(
+        "loggedIn",
+        "true"
+    );
+
+    sessionStorage.setItem(
+        "userMobile",
+        mobile
+    );
+
+
+    if(remember){
+
+        localStorage.setItem(
+            "rememberMobile",
+            mobile
+        );
+
+    }else{
+
+        localStorage.removeItem(
+            "rememberMobile"
+        );
+
+    }
+
+
+    /* Success */
+
+    message.style.color = "#16a05d";
+
+    message.textContent =
+        "Login successful!";
+
+
+    /* Open Home */
+
+    setTimeout(function(){
+
+        window.location.href =
+            "home.html";
+
+    },700);
+
+});
+
+
+/* =========================
+   FORGOT PASSWORD
+========================= */
+
+function forgotPassword(){
+
+    window.location.href =
+        "forgot-password.html";
+}
+
+
+/* =========================
+   REGISTER
+========================= */
+
+function registerPage(event){
+
+    event.preventDefault();
+
+    window.location.href =
+        "register.html";
+}
+
+
+/* =========================
+   LOAD REMEMBERED MOBILE
+========================= */
+
+window.addEventListener("DOMContentLoaded",function(){
+
+    const savedMobile =
+        localStorage.getItem(
+            "rememberMobile"
+        );
+
+    if(savedMobile){
+
+        document
+        .getElementById("mobile")
+        .value = savedMobile;
+
+        document
+        .getElementById("rememberMe")
+        .checked = true;
+
+    }
+
+});
+
+</script>
+
+</body>
+</html>
